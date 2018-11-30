@@ -21,3 +21,18 @@ body {
 .row:hover {
   background-color: #383838;
 }
+
+/* search engine section layout */
+.search-engine {
+  padding-bottom: 30px;
+}
+.search-engine span {
+  font-size: 14pt;
+  padding-right: 1%;
+}
+.searchbox {
+  width: 35%;
+}
+.searchbox:focus {
+  outline: none;
+}
