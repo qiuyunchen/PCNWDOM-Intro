@@ -69,3 +69,28 @@ const playlist = {
     }
   ]
 };
+
+//Change webpage page-title
+document.querySelector('.display-4').innerText = playlist.name;
+document.querySelector('.lead').innerText = playlist.description;
+
+//Populate page with songs
+const interpolate = (img, title, singers) =>{
+  return `<div class='row mb-2'>
+  <div class='col-1'>
+    <img src="${img}" class="rounded" style='width: 50px; height: 50px;'>
+  </div>
+  <div class='col-11'>
+    <p class='mb-0 mt-1 song-name'>${title}</p>
+    <p class='my-0 song-artists'>${singers}</p>
+  </div>
+  </div>`
+}
+
+const htmlSnowBall = playlist.songs.reduce( (acc, o) =>{
+  return acc + interpolate(o.image, o.name, o.artists);
+}, '');
+
+document.querySelector('.song-list').innerHTML = htmlSnowBall;
+
+//Implement search engine
