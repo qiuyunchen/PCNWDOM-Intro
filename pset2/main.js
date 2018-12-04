@@ -75,22 +75,63 @@ document.querySelector('.display-4').innerText = playlist.name;
 document.querySelector('.lead').innerText = playlist.description;
 
 //Populate page with songs
+// const interpolate = (img, title, singers) =>{
+//   return `<div class='row mb-2'>
+//   <div class='col-1'>
+//     <img src="${img}" class="rounded" style='width: 50px; height: 50px;'>
+//   </div>
+//   <div class='col-11'>
+//     <p class='mb-0 mt-1 song-name'>${title}</p>
+//     <p class='my-0 song-artists'>${singers}</p>
+//   </div>
+//   </div>`
+// }
+
+// const htmlSnowBall = playlist.songs.reduce( (acc, o) =>{
+//   return acc + interpolate(o.image, o.name, o.artists);
+// }, '');
+
+// document.querySelector('.song-list').innerHTML = htmlSnowBall;
+
+
+//Create state variable and render function like Taq
 const interpolate = (img, title, singers) =>{
-  return `<div class='row mb-2'>
-  <div class='col-1'>
-    <img src="${img}" class="rounded" style='width: 50px; height: 50px;'>
+  return `
+  <div class='row mb-2'>
+    <div class='col-1'>
+      <img src="${img}" class="rounded" style='width: 50px; height: 50px;'>
+    </div>
+    <div class='col-11'>
+      <p class='mb-0 mt-1 song-name'>${title}</p>
+      <p class='my-0 song-artists'>${singers}</p>
+    </div>
   </div>
-  <div class='col-11'>
-    <p class='mb-0 mt-1 song-name'>${title}</p>
-    <p class='my-0 song-artists'>${singers}</p>
-  </div>
-  </div>`
+  `
+}
+const state = {songs: playlist.songs};
+
+const render = state =>{
+  const htmlContent = state.songs.reduce( (acc, o) =>{
+    return acc + interpolate(o.image, o.name, o.artists);
+  }, '');
+
+  document.querySelector('.song-list').innerHTML = htmlContent;
 }
 
-const htmlSnowBall = playlist.songs.reduce( (acc, o) =>{
-  return acc + interpolate(o.image, o.name, o.artists);
-}, '');
+render(state);
 
-document.querySelector('.song-list').innerHTML = htmlSnowBall;
+//Implement dynamic search engine
+const searchBox = document.querySelector('.searchbox');
 
-//Implement search engine
+searchBox.addEventListener('input', e =>{
+  const searchStr = e.target.value.trim().toLowerCase();
+  const wantedSongList = playlist.songs.filter( o =>{
+    const songName = o.name.toLowerCase();
+    const artistNames = o.artists.reduce( (acc,a)=>{
+      return acc + a.toLowerCase() + ' ';
+    },'');
+    return (songName+" "+artistNames).indexOf(searchStr) > -1;
+  });
+  state.songs = wantedSongList;
+  render(state);
+});
